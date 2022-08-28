@@ -1,4 +1,3 @@
-const { remove } = require("../models/productModel");
 
 class ApiFeatures{
     /* param1 db query, keyword*/
@@ -13,10 +12,9 @@ class ApiFeatures{
        $options: "i", } }
      : {};
      
-     console.log(keyword)
 
      //now we have to  tell query that you can search this know.
-      this.query = this.query.find({ ...keyword}); //spread operator to open that object 
+      this.query = this.query.find({ ...keyword}); //spread operator to open that object not passed by reference
       return this;  //returning this class 
     }
 
@@ -28,8 +26,25 @@ class ApiFeatures{
        const removeFields = ["keyword","page","limit"];
 
        removeFields.forEach((key)=> delete queryCopy[key]);
+      
+      //Filter for Price and Rating this time
+      let queryStr = JSON.stringify(queryCopy);
+      queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, key => `$${key}`);   //add $ before gt,gte,and lt
+       this.query = this.query.find(JSON.parse(queryStr));  //this.query means Product.find method
+     
 
-       console.log(queryCopy);
+       return this;
+    }
+
+    pagination(resultPerPage)
+    {
+      const  currentPage = Number(this.queryStr) || 1;  //suppose we have 50 product and we want to show 5 on each page 
+
+      const skip = resultPerPage * (currentPage-1)  //eg 1st time we dont have to skip 1-1 = 0 and next time skip 5 show next 5 .......
+      
+      this.query = this.query.limit(resultPerPage).skip(skip);
+     
+      return this;
     }
 
 

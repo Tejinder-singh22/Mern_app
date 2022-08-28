@@ -25,6 +25,8 @@ const server = app.listen(process.env.PORT,()=>{
     console.log(`listening on port http://localhost:${process.env.PORT}`);
 })
 
+module.exports = server;
+
 
 process.on("unhandledRejection", (err)=>{  //unhandles means ex: where promise is unhandled / catch is not there after then example
     console.log(`Error: ${err.message}`);
