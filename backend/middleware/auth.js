@@ -17,3 +17,18 @@ exports.isAuthenticatedUser = catchAsyncErrors(async(req,res,next)=>{
    next();
 
 })
+
+exports.authorizeRoles = (...roles) =>{ //this is a rest operator in funciton argument
+     
+    return (req,res,next)=>{
+        if(!roles.includes(req.user.role)){  //after auth middleware current user's data is stored in req parmameter as user
+
+           /* if  user's role not matched with defined role which is comming (...roles)*/
+            return next(new ErrorHandler(`Role: ${req.user.role} is not allowed to access the resource`,403))
+        }
+
+        next();  
+     }
+
+
+}
