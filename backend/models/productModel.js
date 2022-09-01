@@ -62,6 +62,12 @@ const productSchema = new mongoose.Schema({
             }
         }
     ],
+
+    user:{          /* this field is to store the id of a user who is making a product (remove confusion) */
+        type: mongoose.Schema.ObjectId,
+        ref: "User",  /* ref option is what tells Mongoose which model to use during population */
+        required:true,
+    },
     createdAt:{
         type:Date,
         default:Date.now

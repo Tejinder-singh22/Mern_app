@@ -38,10 +38,9 @@ class ApiFeatures{
 
     pagination(resultPerPage)
     {
-      const  currentPage = Number(this.queryStr) || 1;  //suppose we have 50 product and we want to show 5 on each page 
-
+      const  currentPage = Number(this.queryStr.page) || 1;  //suppose we have 50 product and we want to show 5 on each page 
       const skip = resultPerPage * (currentPage-1)  //eg 1st time we dont have to skip 1-1 = 0 and next time skip 5 show next 5 .......
-      
+      // console.log(skip);
       this.query = this.query.limit(resultPerPage).skip(skip);
      
       return this;

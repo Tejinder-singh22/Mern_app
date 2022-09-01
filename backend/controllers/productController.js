@@ -5,6 +5,8 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ApiFeatures = require("../utils/apiFeatures");
 // create product -- admin
 exports.createProduct  = catchAsyncErrors(async (req,res,next)=>{
+    req.body.user = req.user.id;  // in body we are storing the current users id which is stored during cookies (auth)
+
     const product = await Product.create(req.body);
 
     res.status(201).json({
