@@ -2,6 +2,8 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const User = require("../models/userModel");
 const sendToken = require("../utils/jwtToken");
+const sendEmail = require("../utils/sendEmail")
+const crypto = require("crypto");
 
 //Register are Userr
 exports.registerUser = catchAsyncErrors(async(req,res,next)=>{
@@ -61,4 +63,80 @@ exports.logout = catchAsyncErrors(async(req,res,next)=>{
         success:true,
         message:"Logged Out",
     })
+})
+
+//Forget Passord
+exports.forgotPassword = catchAsyncErrors(async(req,res,next)=>{
+
+     const user = await User.findOne({
+        email:req.body.email
+     })
+
+     if(!user){
+        return next(new ErrorHandler("User not found",404));
+
+     }
+
+     //Get ResetPassword Token
+    const resetToken = user.getResetPasswordToken();
+ 
+    await user.save({validateBeforeSave: false});  //saving because in getResetPasswordToken function we added hex token in user's schema in field name as resetPasswordToken 
+
+      /* The Url which will be sent in mail to reset*/
+    const resetPasswordUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`
+ 
+    /*  message to sent in email*/
+    const message = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\n if you have not requested this email then, please ignore it `
+
+     try{
+
+         await sendEmail({
+         email: user.email,
+         subject: `Ecommerce Password Recovery`,
+         message,
+         })
+
+         res.status(200).json({
+            success:true,
+            message: `Email sent to ${user.email} successfully`
+         })
+     } catch (error)
+     {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save({ validateBeforeSave:false});
+
+        return next(new ErrorHandler(error.message, 500));
+
+     }
+     
+})
+
+//Reset Password BY url we got through Email
+exports.resetPassword = catchAsyncErrors(async (req,res,next)=>{
+     
+     //creating token hash
+     const resetPasswordToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
+     
+     const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire:{$gt:Date.now()},
+     })
+  
+     if(!user){
+        return next(new ErrorHandler("Reset Password Token is invalid or has been expired",400))
+     }
+
+     if(req.body.password !== req.body.confirmPassword){
+        return next(new ErrorHandler("Password does not password",400))
+     }
+
+     user.password = req.body.password;
+     user.resetPasswordToken =undefined;
+     user.resetPasswordExpire = undefined;
+
+    await user.save()
+
+    sendToken(user,200,res);
 })
