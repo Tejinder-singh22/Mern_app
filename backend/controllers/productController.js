@@ -71,7 +71,7 @@ exports.deleteProduct = catchAsyncErrors(async (req,res,next)=>{
 exports.getProductDetails = catchAsyncErrors(async(req,res,next)=>{
 
     let product = await Product.findById(req.params.id);
-
+    const productCount = await Product.countDocuments();
     if(!product){
        return next(new ErrorHandler("product not found",404)) //what ever we pass in next operator means what will run next or next tick.
     }

@@ -140,3 +140,38 @@ exports.resetPassword = catchAsyncErrors(async (req,res,next)=>{
 
     sendToken(user,200,res);
 })
+
+exports.getUserDetails = catchAsyncErrors(async (req, res, next)=> {
+
+    const user = await User.findById(req.user.id);
+
+    res.status(200).json({
+        success: true,
+        user,
+    })
+})
+
+exports.updatePassword = catchAsyncErrors( async (req,res,next)=>{
+    
+    
+    const user = await User.findById(req.user.id).select("+password");
+ 
+    const isPasswordMatched = await user.comparePassword(req.body.oldPassword)
+ 
+    if(!isPasswordMatched){
+        return next(new ErrorHandler("incorrect Old Password",401));
+
+    }
+
+    if(req.body.newPassword !== req.body.confirmPassword)
+{
+   return next(new ErrorHandler("password does not matched",400))
+}
+
+  user.password  = req.body.newPassword; //changing password field of mongo document
+
+  await user.save();
+
+sendToken(user,200,res)
+ 
+})
