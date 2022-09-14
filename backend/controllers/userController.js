@@ -156,7 +156,7 @@ exports.getUserDetails = catchAsyncErrors(async (req, res, next)=> {
 exports.updatePassword = catchAsyncErrors( async (req,res,next)=>{
     
     
-    const user = await User.findById(req.user.id).select("+password");
+    const user = await User.findById(req.user.id).select("+password"); //check modal ... password field cant come in find() directly
  
     const isPasswordMatched = await user.comparePassword(req.body.oldPassword)
  
@@ -221,7 +221,7 @@ exports.getSingleUser = catchAsyncErrors( async (req,res,next)=>{
     const user = await User.findById(req.params.id);
 
      if(!user){
-        return next(new ErrorHandler("user doesn't exist with id", req.params.id));
+        return next(new ErrorHandler(`User doesn't exist with id ${req.params.id}`, 404));
      }
     res.status(200).json({
 success:true,
@@ -264,10 +264,11 @@ exports.deleteUser = catchAsyncErrors( async (req,res,next)=>{
 
     const user = await User.findById(req.params.id);
 
+    console.log(user +'this is user');
     //we will remive cloudinary  Later
  
     if(!user){
-        return next(new ErrorHandler("user doesn't exist with id", req.params.id));
+        return next(new ErrorHandler(`user doesn't exist with id ${req.params.id}`, 404));
      }
 
      await user.remove();
@@ -275,7 +276,7 @@ exports.deleteUser = catchAsyncErrors( async (req,res,next)=>{
     
     res.status(200).json({
         success:true,
-        message: "user deletrd successfully"
+        message: "user deleted successfully"
     })
      
     })
