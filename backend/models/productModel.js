@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema({
         required:[true,"please Enter product description"],
         maxLength:[8,"price cannot exceed 8 characters"]
     },
-    rating:{
+    ratings:{
         type:Number,
         default:0
     },
@@ -48,6 +48,11 @@ const productSchema = new mongoose.Schema({
     },
     reviews:[
         {
+            user:{          /* this field is to store the id of a user who is making a product (remove confusion) */
+            type: mongoose.Schema.ObjectId,
+            ref: "User",  /* ref option is what tells Mongoose which model to use during population */
+            required:true,
+        },
             name:{
                 type:String,
                 required:true,
