@@ -18,7 +18,7 @@ exports.createProduct  = catchAsyncErrors(async (req,res,next)=>{
 // Get All products
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) =>{
     
-  const resultPerPage = 5;
+  const resultPerPage = 8;
   const productCount = await Product.countDocuments();
 
   const ApiFeature = new ApiFeatures(Product.find(), req.query).search().filter().pagination(resultPerPage);
@@ -26,7 +26,7 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) =>{
 //   const products =   await Product.find();
     const products =   await ApiFeature.query; //we can write above line know like this also //same
     res.status(200).json({ success:true,
-    products});
+    products,productCount,});
 }
 )
 //Update Product -- admin
