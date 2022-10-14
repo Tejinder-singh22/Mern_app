@@ -22,7 +22,9 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) =>{
   const productCount = await Product.countDocuments();
 
   const ApiFeature = new ApiFeatures(Product.find(), req.query).search().filter().pagination(resultPerPage);
-
+   
+  // console.log(ApiFeature+' ');
+  // console.log(ApiFeature.query+' ');
 //   const products =   await Product.find();
     const products =   await ApiFeature.query; //we can write above line know like this also //same
     res.status(200).json({ success:true,

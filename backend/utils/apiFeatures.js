@@ -7,7 +7,7 @@ class ApiFeatures{
     }
 
     search(){    //here we are  search if any character matches or it is capital or small eg: samosa/SAMOSA give samosa related search also
-     const keyword = this.queryStr.keyword ? 
+     const keyword = this.queryStr.keyword ?  //here queryStr.keyword is passed as reference key in url in headers
      { name: { $regex: this.queryStr.keyword,
        $options: "i", } }
      : {};
@@ -20,7 +20,7 @@ class ApiFeatures{
 
     /* filter according to category*/
     filter(){
-       const queryCopy =  {...this.queryStr}
+       const queryCopy =  {...this.queryStr} //whilw copiyng object use ... to not use object by reference, it can't effect original one 
 
        //Removing some fields accept category because we only need cateogroy this time
        const removeFields = ["keyword","page","limit"];

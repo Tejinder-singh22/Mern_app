@@ -12,17 +12,17 @@ const Home = () => {
 
   const dispatch = useDispatch();
 
-  const {loading,error,products,productsCount} = useSelector((state) => state.products) // to get all data from redux store
+  const {loading,products,error} = useSelector((state) => state.products) // useSelector to get all data from redux store
 
- 
+  console.log(products)
   useEffect(()=>{
 
-  //  if(error){
-  //   return alert.error(error);
-  //  }
+   if(error){
+    return console.log(error);
+   }
 
     dispatch(getProduct());
- }, [dispatch, error]);   // things inside this array are the dependencies like when they change then the code inside useEffect will work
+ }, [dispatch,error]);   // things inside this array are the dependencies like when they change then the code inside useEffect will work
 
   return (
   <Fragment>
