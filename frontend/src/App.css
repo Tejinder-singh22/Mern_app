@@ -2,3 +2,12 @@
     margin:0;
     scroll-behavior: smooth;
 }
+
+.greenColor{
+    color: rgb(98, 156, 5);
+
+}
+
+.redColor{
+    color: red;
+}

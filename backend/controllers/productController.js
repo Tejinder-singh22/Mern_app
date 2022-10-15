@@ -19,7 +19,7 @@ exports.createProduct  = catchAsyncErrors(async (req,res,next)=>{
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) =>{
     
   const resultPerPage = 8;
-  const productCount = await Product.countDocuments();
+  const productsCount = await Product.countDocuments();
 
   const ApiFeature = new ApiFeatures(Product.find(), req.query).search().filter().pagination(resultPerPage);
    
@@ -28,7 +28,7 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) =>{
 //   const products =   await Product.find();
     const products =   await ApiFeature.query; //we can write above line know like this also //same
     res.status(200).json({ success:true,
-    products,productCount,});
+    products,productsCount,});
 }
 )
 //Update Product -- admin
@@ -80,8 +80,7 @@ exports.getProductDetails = catchAsyncErrors(async(req,res,next)=>{
 
     res.status(200).json(({
         success:true,
-        product,
-        productCount,
+        product
     }))
 
 
