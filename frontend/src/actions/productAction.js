@@ -5,12 +5,19 @@ import { ALL_PRODUCT_FAIL, ALL_PRODUCT_REQUEST, ALL_PRODUCT_SUCCESS,PRODUCT_DETA
 
 //1st
 // dispatch (a fun of redux) an actions
-export const  getProduct = () => async (dispatch) =>{  //dispatch is a function of the Redux store. You call store. dispatch to dispatch an action. This is the only way to trigger a state change.
- 
+export const  getProduct = (keyword = "",currentPage = 1,category,ratings=0) => async (dispatch) =>{  //dispatch is a function of the Redux store. You call store. dispatch to dispatch an action. This is the only way to trigger a state change.
+ //keyword and current page are are params here to pass in url to get dired data
+ //default value of current page is 1 and keword have " "
     try{
      dispatch({type:ALL_PRODUCT_REQUEST});
 
-     const {data} = await axios.get("/api/v1/products")
+     let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&rating=${ratings}&ratings[gte]=${ratings}`;
+
+     if (category) {
+       link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&category=${category}&ratings[gte]=${ratings}`;
+     }
+
+     const {data} = await axios.get(link) // if keyword is empty then obn=viously we have all products
 
      dispatch({ type: ALL_PRODUCT_SUCCESS,
     payload: data,

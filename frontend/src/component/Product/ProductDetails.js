@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getProductDetails } from '../../actions/productAction';
 import ReviewCard from "./ReviewCard.js";
 import Loader from '../layout/Loader/Loader';
+import MetaData from "../layout/MetaData";
 const ProductDetails = () => {
     const { id } = useParams();
  const dispatch = useDispatch();
@@ -30,6 +31,7 @@ const ProductDetails = () => {
     <Fragment>
       {loading ? <Loader/> :
       (<Fragment>
+        <MetaData title={`${product.name} -- ECOMMERCE`} />
         <div  className='ProductDetails'> 
             <div>
               <Carousel>
