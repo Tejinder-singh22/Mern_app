@@ -6,7 +6,9 @@
   box-sizing: border-box;
   display: flex;
 }
-
+input[type="number"] {
+  padding: 30px !important;
+}
 .ProductDetails > div {
   width: 100%;
   display: flex;

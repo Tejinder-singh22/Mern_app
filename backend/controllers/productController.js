@@ -20,12 +20,16 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) =>{
     
   const resultPerPage = 8;
   const productsCount = await Product.countDocuments();
-
+ console.log(JSON.stringify(req.query)+'the original query');
   const ApiFeature = new ApiFeatures(Product.find(), req.query).search().filter().pagination(resultPerPage);
+   //query is made
    
+
   // console.log(ApiFeature+' ');
-  // console.log(ApiFeature.query+' ');
+  console.log(ApiFeature.query+' Final query');
 //   const products =   await Product.find();
+
+   //now running that query 
     const products =   await ApiFeature.query; //we can write above line know like this also //same
     res.status(200).json({ success:true,
     products,productsCount,});

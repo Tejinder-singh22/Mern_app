@@ -55,10 +55,12 @@ const options = [
 
   return (
     <Fragment>
+           <Backdrop open={open} style={{ zIndex: "10" }} />
       <SpeedDial
   ariaLabel="SpeedDial basic example"
   onClose={()=>setOpen(false)}
   onOpen={()=>setOpen(true)}
+  style={{ zIndex: "11" }}
   open={open}
   direction = "down"
   className="speedDial"

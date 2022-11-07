@@ -25,14 +25,14 @@ class ApiFeatures{
        //Removing some fields accept category because we only need cateogroy this time
        const removeFields = ["keyword","page","limit"];
 
-       removeFields.forEach((key)=> delete queryCopy[key]);
+       removeFields.forEach((key)=> delete queryCopy[key]); // read like this -> delete from object [this]
       
       //Filter for Price and Rating this time
       let queryStr = JSON.stringify(queryCopy);
       queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, key => `$${key}`);   //add $ before gt,gte,and lt
        this.query = this.query.find(JSON.parse(queryStr));  //this.query means Product.find method
      
-
+console.log(this.query+' inner');
        return this;
     }
 

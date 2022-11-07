@@ -27,23 +27,29 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [category, setCategory] = useState("");
   const [ratings, setRatings] = useState(0);
+  const [price, setPrice] =  useState([2,10000]);
   const {
     products,
     loading,
     productsCount,
     resultPerPage
   } = useSelector((state) => state.products);
-  const { keyword } = useParams();
+  const { keyword } = useParams(); // get from url what ever entered in search see app.js
   const setCurrentPageNo = (e) => {  // this will set our current page initially one, but if products are more then results to show then pagination will set current page value to 2 with its button[2], which automatically hits url in action.js with "?page= 2" which leads db to show with skipped products as mentioned in backend logic
     setCurrentPage(e);
+  };
+
+  const rangeSelector = (event, newValue) => {
+    setPrice(newValue);
+    console.log(newValue)
   };
 
 
   useEffect(() => {
 
-    dispatch(getProduct(keyword,currentPage,category,ratings));
+    dispatch(getProduct(keyword,currentPage,category,ratings,price));
 
-  }, [dispatch,keyword,currentPage,category,ratings]);
+  }, [dispatch,keyword,currentPage,category,ratings,price]);
 
   return (
     <Fragment>
@@ -87,7 +93,23 @@ const Products = () => {
                 min={0}
                 max={5}
               />
+
+              <Typography id="range-slider" gutterBottom>
+                Select Price:
+              </Typography>
+              <Slider
+                value={price}
+                onChange={rangeSelector}
+                valueLabelDisplay="auto"
+                min={0}
+                max={10000}
+              />
+              Price range is between {price[0]}/- and {price[1]} /-
             </fieldset>
+             
+              
+              
+             
 
           </div>
 
